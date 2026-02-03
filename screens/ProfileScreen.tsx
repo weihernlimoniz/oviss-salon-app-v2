@@ -43,7 +43,6 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, onUpdateU
           </button>
         </div>
         <h2 className="text-2xl font-bold text-zinc-900">{user.name}</h2>
-        <p className="text-xs text-zinc-400 font-medium uppercase tracking-widest mt-1">Valued Member</p>
       </div>
 
       {/* Stats/Credit */}
@@ -83,6 +82,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, onUpdateU
                 className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 px-4 text-zinc-900 focus:ring-1 focus:ring-amber-500 transition-all outline-none"
                 value={formData.email}
                 onChange={e => setFormData(prev => ({...prev, email: e.target.value}))}
+              />
+            </div>
+            <div>
+              <label className="text-xs text-zinc-500 font-bold uppercase mb-1 block px-1">Phone Number</label>
+              <input 
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 px-4 text-zinc-900 focus:ring-1 focus:ring-amber-500 transition-all outline-none"
+                value={formData.phone}
+                onChange={e => setFormData(prev => ({...prev, phone: e.target.value}))}
               />
             </div>
             <div className="grid grid-cols-2 gap-3">

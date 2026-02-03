@@ -9,7 +9,7 @@ interface CreateAccountScreenProps {
 const CreateAccountScreen: React.FC<CreateAccountScreenProps> = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
-    dob: '',
+    age: '25', // Default age
     gender: Gender.MALE,
     phone: '',
     email: '',
@@ -17,12 +17,29 @@ const CreateAccountScreen: React.FC<CreateAccountScreenProps> = ({ onSubmit }) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.dob) {
+    if (!formData.name || !formData.age) {
       alert('Please fill in all required fields');
       return;
     }
-    onSubmit(formData);
+
+    // Convert age to a DOB string (approximate to Jan 1st of that birth year)
+    // This allows age to auto-increase annually when calculated from this date
+    const birthYear = new Date().getFullYear() - parseInt(formData.age);
+    const dob = `${birthYear}-01-01`;
+
+    const submissionData = {
+      name: formData.name,
+      dob: dob,
+      gender: formData.gender,
+      phone: formData.phone,
+      email: formData.email,
+    };
+
+    onSubmit(submissionData);
   };
+
+  // Generate age options 1 to 100
+  const ageOptions = Array.from({ length: 100 }, (_, i) => i + 1);
 
   return (
     <div className="p-6 pt-20 flex flex-col min-h-screen bg-zinc-100">
@@ -45,14 +62,17 @@ const CreateAccountScreen: React.FC<CreateAccountScreenProps> = ({ onSubmit }) =
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1">Birthday *</label>
-              <input 
+              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1">Age *</label>
+              <select 
                 required
-                type="date" 
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 px-4 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500/50"
-                value={formData.dob}
-                onChange={(e) => setFormData(prev => ({...prev, dob: e.target.value}))}
-              />
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 px-4 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500/50 appearance-none"
+                value={formData.age}
+                onChange={(e) => setFormData(prev => ({...prev, age: e.target.value}))}
+              >
+                {ageOptions.map(age => (
+                  <option key={age} value={age}>{age}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1">Gender</label>
